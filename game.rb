@@ -26,6 +26,39 @@ class Game < Gosu::Window
     draw_objects(@test_words)
   end
 
+  def button_down(id)
+    if id == 40 #enterkey
+      @score += 10 if check_if_input_matches?
+      reset_input_to_blank
+      remove_current_word_from_list
+      move_words_into_position
+    elsif id == 42 #backspace
+      close
+    elsif id == Gosu::KbEscape
+      close
+    else
+      @input << @num_to_char_hash[id].to_s
+    end
+  end
+
+  def update
+    @current_word = get_current_word(@word_position)
+  end
+
+  private
+
+  def find_conversion(range, start_index=0)
+    range.inject({}) {|d, k| d[range.find_index(k) + start_index] = k; d}
+  end
+
+  def reset_input_to_blank
+    @input = ''
+  end
+
+  def get_current_word(position)
+    @test_words[position]
+  end
+
   def draw_objects(objects)
     objects.each(&:draw)
   end
@@ -42,38 +75,6 @@ class Game < Gosu::Window
     @current_word.word == @input
   end
 
-  def button_down(id)
-    if id == 40 #enterkey
-      @score += 10 if check_if_input_matches?
-      reset_input_to_blank
-      remove_current_word_from_list
-      move_words_into_position
-    elsif id == 42 #backspace
-      close
-    elsif id == Gosu::KbEscape
-      close
-    else
-      @input << @num_to_char_hash[id].to_s
-    end
-  end
-
-  def reset_input_to_blank
-    @input = ''
-  end
-
-  def get_current_word(position)
-    @test_words[position]
-  end
-
-  def update
-    @current_word = get_current_word(@word_position)
-  end
-
-  private
-
-  def find_conversion(range, start_index=0)
-    range.inject({}) {|d, k| d[range.find_index(k) + start_index] = k; d}
-  end
 end
 
 game = Game.new
