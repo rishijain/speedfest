@@ -8,6 +8,7 @@ class Game < Gosu::Window
     self.caption = 'Type motherfucker type.'
 
     @score = 0
+    @score_value = Gosu::Font.new(self, Gosu::default_font_name, 35)
     @word_position = 0
     @input_area = Gosu::Font.new(self, Gosu::default_font_name, 35)
     @input = ''
@@ -22,6 +23,7 @@ class Game < Gosu::Window
   end
 
   def draw
+    @score_value.draw("Score: #{@score}", 150, 20, 0, 1, 1, 0xff_ffffff)
     @input_area.draw(@input, 150, 60, 0, 1, 1, 0xff_ffffff)
     draw_objects(@test_words)
   end
