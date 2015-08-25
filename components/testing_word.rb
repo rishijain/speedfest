@@ -15,4 +15,6 @@ class TestingWord
 
   def update
   end
+
+  private
 end

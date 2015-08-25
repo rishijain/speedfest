@@ -21,7 +21,7 @@ class Game < Gosu::Window
     number_range = (1..9)
     @num_to_char_hash = find_conversion(alpha_range, 4)
     @num_to_char_hash.merge!(find_conversion(number_range, 30)).merge!({39 => 0})
-    test_word_list = ['rishi', 'jain', 'is', 'game']
+    test_word_list = (easy_words + medium_words + hard_words).sample(20)
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 80, d)}
     @game_started = true
   end
@@ -58,6 +58,19 @@ class Game < Gosu::Window
 
   private
 
+  def easy_words
+    ['owed', 'plows', 'smart', 'snare', 'rails', 'dares', 'wears', 'lairs', 'liars', 'pails',
+     'slaps', 'jails', 'kills', 'flick', 'pokes', 'ruins', 'rakes', 'jewel', 'plead']
+  end
+
+  def medium_words
+    ['equipment', 'apparent', 'intelligence', 'medieval', 'weird', 'rhythm']
+  end
+
+  def hard_words
+    ['amateur', 'bellwether', 'believe', 'cemetery', 'conscience', 'conscientious', 'leisure', 'conviviality', '']
+  end
+
   def current_word_movement_for_round_2
     @current_word.x -= 3
   end
@@ -68,9 +81,9 @@ class Game < Gosu::Window
   end
 
   def assign_round
-    if @score >= 10 and @score < 20
+    if @score >= 30 and @score < 60
       @round = 2
-    elsif @score >= 20
+    elsif @score >= 60
       @round = 3
     end
   end
