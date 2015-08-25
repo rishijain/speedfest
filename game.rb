@@ -7,6 +7,10 @@ class Game < Gosu::Window
     super 800, 600, false
     self.caption = 'Type motherfucker type.'
 
+    @bg = Gosu::Image.new self, 'bg.png'
+
+    @round = 1
+    @game_title = Gosu::Font.new(self, Gosu::default_font_name, 50)
     @score = 0
     @score_value = Gosu::Font.new(self, Gosu::default_font_name, 35)
     @word_position = 0
@@ -23,7 +27,9 @@ class Game < Gosu::Window
   end
 
   def draw
-    @score_value.draw("Score: #{@score}", 150, 20, 0, 1, 1, 0xff_ffffff)
+    @bg.draw 0,0,0
+    @game_title.draw("Speedfest", 300, 10, 0, 1, 1, 0xff_0000ff)
+    @score_value.draw("Score: #{@score}", 150, 40, 0, 1, 1, 0xff_ffffff)
     @input_area.draw(@input, 150, 60, 0, 1, 1, 0xff_ffffff)
     draw_objects(@test_words)
   end
@@ -31,6 +37,7 @@ class Game < Gosu::Window
   def button_down(id)
     if id == 40 #enterkey
       @score += 10 if check_if_input_matches?
+      assign_round
       reset_input_to_blank
       remove_current_word_from_list
       move_words_into_position
@@ -45,9 +52,28 @@ class Game < Gosu::Window
 
   def update
     @current_word = get_current_word(@word_position)
+    current_word_movement_for_round_2 if @round == 2
+    current_word_movement_for_round_3 if @round == 3
   end
 
   private
+
+  def current_word_movement_for_round_2
+    @current_word.x -= 3
+  end
+
+  def current_word_movement_for_round_3
+    @current_word.y += rand(-4..10)
+    @current_word.x -= rand(-10..10)
+  end
+
+  def assign_round
+    if @score >= 10 and @score < 20
+      @round = 2
+    elsif @score >= 20
+      @round = 3
+    end
+  end
 
   def find_conversion(range, start_index=0)
     range.inject({}) {|d, k| d[range.find_index(k) + start_index] = k; d}
