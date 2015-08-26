@@ -8,9 +8,12 @@ class Game < Gosu::Window
     self.caption = 'Type motherfucker type.'
 
     @bg = Gosu::Image.new self, 'bg.png'
-
+    @lame = Gosu::Image.new self, 'lame.jpg'
+    @time_monitor = 0 #value is in seconds
     @round = 1
     @game_title = Gosu::Font.new(self, Gosu::default_font_name, 50)
+    @final_score = Gosu::Font.new(self, Gosu::default_font_name, 30)
+    @time_monitor_text = Gosu::Font.new(self, Gosu::default_font_name, 50)
     @score = 0
     @score_value = Gosu::Font.new(self, Gosu::default_font_name, 35)
     @word_position = 0
@@ -23,15 +26,28 @@ class Game < Gosu::Window
     @num_to_char_hash.merge!(find_conversion(number_range, 30)).merge!({39 => 0})
     test_word_list = (easy_words + medium_words + hard_words).sample(20)
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 80, d)}
-    @game_started = true
+    @game_running = true
+    @count = 0
+    @time_left = 5
   end
 
   def draw
-    @bg.draw 0,0,0
-    @game_title.draw("Speedfest", 300, 10, 0, 1, 1, 0xff_0000ff)
-    @score_value.draw("Score: #{@score}", 150, 40, 0, 1, 1, 0xff_ffffff)
-    @input_area.draw(@input, 150, 60, 0, 1, 1, 0xff_ffffff)
-    draw_objects(@test_words)
+    if @time_left > 0
+      @bg.draw 0,0,0
+      @time_monitor_text.draw("Time left: #{@time_left}", 200, 150, 0, 1, 1, 0xff_0000ff)
+      @game_title.draw("Speedfest", 300, 10, 0, 1, 1, 0xff_0000ff)
+      @score_value.draw("Score: #{@score}", 150, 40, 0, 1, 1, 0xff_ffffff)
+      @input_area.draw(@input, 150, 60, 0, 1, 1, 0xff_ffffff)
+      draw_objects(@test_words)
+    else
+      @final_score.draw("You got #{@score/10} words right.", 200, 200, 0, 1, 1, 0xff_0000ff)
+      @final_score.draw("#{final_score_message}", 100, 250, 0, 1, 1, 0xff_0000ff)
+      @current_word.x -= 800
+      @time_monitor_text.draw("Time left: #{@time_left}", -400, 150, 0, 1, 1, 0xff_0000ff)
+      @game_title.draw("Speedfest", -300, 10, 0, 1, 1, 0xff_0000ff)
+      @score_value.draw("Score: #{@score}", -300, 40, 0, 1, 1, 0xff_ffffff)
+      @input_area.draw(@input, -300, 60, 0, 1, 1, 0xff_ffffff)
+    end
   end
 
   def button_down(id)
@@ -42,6 +58,7 @@ class Game < Gosu::Window
       remove_current_word_from_list
       move_words_into_position
     elsif id == 42 #backspace
+      @game_running = false
       close
     elsif id == Gosu::KbEscape
       close
@@ -51,6 +68,7 @@ class Game < Gosu::Window
   end
 
   def update
+    update_time_monitor
     @current_word = get_current_word(@word_position)
     current_word_movement_for_round_2 if @round == 2
     current_word_movement_for_round_3 if @round == 3
@@ -58,9 +76,17 @@ class Game < Gosu::Window
 
   private
 
+  def update_time_monitor
+    @count += 1
+    if @count%60 == 0
+      @time_monitor += 1
+      @time_left -= 1
+    end
+  end
+
   def easy_words
     ['owed', 'plows', 'smart', 'snare', 'rails', 'dares', 'wears', 'lairs', 'liars', 'pails',
-     'slaps', 'jails', 'kills', 'flick', 'pokes', 'ruins', 'rakes', 'jewel', 'plead']
+      'slaps', 'jails', 'kills', 'flick', 'pokes', 'ruins', 'rakes', 'jewel', 'plead']
   end
 
   def medium_words
@@ -116,6 +142,18 @@ class Game < Gosu::Window
     @current_word.word == @input
   end
 
+  def final_score_message
+    if @score < 60
+      @lame.draw 0,0,0
+      return 'I have no words to describe this performance.'
+    elsif @score >= 60 and @score < 120
+      return 'Just go and practise and practise and practise bcoz it will never be enough for you ..!!'
+    elsif @score >= 120 and @score < 190
+      return 'You are alright ... nothing special about you.'
+    elsif @score == 200
+      return 'My Lord .. I have been looking for you for ages and I have finally found you.'
+    end
+  end
 end
 
 game = Game.new
