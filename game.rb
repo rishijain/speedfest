@@ -28,7 +28,8 @@ class Game < Gosu::Window
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 80, d)}
     @game_running = true
     @count = 0
-    @time_left = 5
+    @time_left = 50
+    @keypress = Gosu::Song.new(self, "keypress.mp3")
   end
 
   def draw
@@ -63,6 +64,7 @@ class Game < Gosu::Window
     elsif id == Gosu::KbEscape
       close
     else
+      @keypress.play(false)
       @input << @num_to_char_hash[id].to_s
     end
   end
