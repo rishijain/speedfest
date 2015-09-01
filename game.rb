@@ -6,16 +6,20 @@ class Game < Gosu::Window
   def initialize
     super 800, 600, false
     self.caption = 'Type motherfucker type.'
-
     @bg = Gosu::Image.new self, 'bg.png'
+    @logo = Gosu::Image.new self, 'newlogo.png'
     @lame = Gosu::Image.new self, 'lame.jpg'
+    @respect = Gosu::Image.new self, 'salute.jpg'
+    @keypress = Gosu::Song.new(self, "keypress.mp3")
     @time_monitor = 0 #value is in seconds
     @round = 1
     @game_title = Gosu::Font.new(self, Gosu::default_font_name, 50)
+    @time_image = Gosu::Image.new self, 'timeleft.png'
+    @score_image = Gosu::Image.new self, 'score.png'
     @final_score = Gosu::Font.new(self, Gosu::default_font_name, 30)
     @time_monitor_text = Gosu::Font.new(self, Gosu::default_font_name, 50)
     @score = 0
-    @score_value = Gosu::Font.new(self, Gosu::default_font_name, 35)
+    @score_value = Gosu::Font.new(self, Gosu::default_font_name, 50)
     @word_position = 0
     @input_area = Gosu::Font.new(self, Gosu::default_font_name, 35)
     @input = ''
@@ -28,23 +32,24 @@ class Game < Gosu::Window
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 80, d)}
     @game_running = true
     @count = 0
-    @time_left = 50
-    @keypress = Gosu::Song.new(self, "keypress.mp3")
+    @time_left = 20
   end
 
   def draw
     if @time_left > 0
       @bg.draw 0,0,0
-      @time_monitor_text.draw("Time left: #{@time_left}", 200, 150, 0, 1, 1, 0xff_0000ff)
-      @game_title.draw("Speedfest", 300, 10, 0, 1, 1, 0xff_0000ff)
-      @score_value.draw("Score: #{@score}", 150, 40, 0, 1, 1, 0xff_ffffff)
+      @logo.draw 300,0,0
+      @time_image.draw 0, 0, 0
+      @score_image.draw 0, 40, 0
+      @time_monitor_text.draw("#{@time_left}", 150, 0, 0, 1, 1, 0xffff0000)
+      @score_value.draw("#{@score}", 110, 40, 0, 1, 1, 0xffff0000)
       @input_area.draw(@input, 150, 60, 0, 1, 1, 0xff_ffffff)
       draw_objects(@test_words)
     else
       @final_score.draw("You got #{@score/10} words right.", 200, 200, 0, 1, 1, 0xff_0000ff)
       @final_score.draw("#{final_score_message}", 100, 250, 0, 1, 1, 0xff_0000ff)
       @current_word.x -= 800
-      @time_monitor_text.draw("Time left: #{@time_left}", -400, 150, 0, 1, 1, 0xff_0000ff)
+      @time_monitor_text.draw("Time left: #{@time_left}", -400, 150, 0, 1, 1, 0xffffff00)
       @game_title.draw("Speedfest", -300, 10, 0, 1, 1, 0xff_0000ff)
       @score_value.draw("Score: #{@score}", -300, 40, 0, 1, 1, 0xff_ffffff)
       @input_area.draw(@input, -300, 60, 0, 1, 1, 0xff_ffffff)
@@ -147,13 +152,14 @@ class Game < Gosu::Window
   def final_score_message
     if @score < 60
       @lame.draw 0,0,0
-      return 'I have no words to describe this performance.'
+      return 'Just one word for you: RESPECT ..!!!'
     elsif @score >= 60 and @score < 120
       return 'Just go and practise and practise and practise bcoz it will never be enough for you ..!!'
     elsif @score >= 120 and @score < 190
       return 'You are alright ... nothing special about you.'
     elsif @score == 200
-      return 'My Lord .. I have been looking for you for ages and I have finally found you.'
+      @respect.draw 0,0,0
+      return 'Just one word for you: RESPECT ..!!!'
     end
   end
 end
