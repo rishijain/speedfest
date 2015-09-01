@@ -12,16 +12,17 @@ class Game < Gosu::Window
     @respect = Gosu::Image.new self, 'salute.jpg'
     @keypress = Gosu::Song.new(self, "keypress.mp3")
     @time_monitor = 0 #value is in seconds
+    font_path = "fonts/badabb.TTF"
     @round = 1
     @game_title = Gosu::Font.new(self, Gosu::default_font_name, 50)
     @time_image = Gosu::Image.new self, 'timeleft.png'
     @score_image = Gosu::Image.new self, 'score.png'
-    @final_score = Gosu::Font.new(self, Gosu::default_font_name, 30)
-    @time_monitor_text = Gosu::Font.new(self, Gosu::default_font_name, 50)
+    @final_score = Gosu::Font.new(self, font_path, 30)
+    @time_monitor_text = Gosu::Font.new(self, font_path, 50)
     @score = 0
-    @score_value = Gosu::Font.new(self, Gosu::default_font_name, 50)
+    @score_value = Gosu::Font.new(self, font_path, 50)
     @word_position = 0
-    @input_area = Gosu::Font.new(self, "fonts/badabb.TTF", 80)
+    @input_area = Gosu::Font.new(self, font_path, 80)
     @input = ''
     @test_words = []
     alpha_range = ('a'..'z')
@@ -32,7 +33,7 @@ class Game < Gosu::Window
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 170, d)}
     @game_running = true
     @count = 0
-    @time_left = 20
+    @time_left = 45
   end
 
   def draw
@@ -42,8 +43,8 @@ class Game < Gosu::Window
       @time_image.draw 0, 0, 0
       @score_image.draw 0, 40, 0
       @time_monitor_text.draw("#{@time_left}", 150, 0, 0, 1, 1, 0xffff0000)
-      @score_value.draw("#{@score}", 110, 40, 0, 1, 1, 0xffff0000)
-      @input_area.draw(@input, 400, 250, 0, 1, 1, 0xff_ffffff)
+      @score_value.draw("#{@score}", 110, 35, 0, 1, 1, 0xffff0000)
+      @input_area.draw(@input, 350, 250, 0, 1, 1, 0xff_ffffff)
       draw_objects(@test_words)
     else
       @final_score.draw("You got #{@score/10} words right.", 200, 200, 0, 1, 1, 0xff_0000ff)
@@ -77,6 +78,7 @@ class Game < Gosu::Window
   def update
     update_time_monitor
     @current_word = get_current_word(@word_position)
+    current_word_movement_for_round_1 if @round == 1
     current_word_movement_for_round_2 if @round == 2
     current_word_movement_for_round_3 if @round == 3
   end
@@ -104,8 +106,13 @@ class Game < Gosu::Window
     ['amateur', 'bellwether', 'believe', 'cemetery', 'conscience', 'conscientious', 'leisure', 'conviviality', '']
   end
 
-  def current_word_movement_for_round_2
+  def current_word_movement_for_round_1
     @current_word.x -= 3
+  end
+
+  def current_word_movement_for_round_2
+    @current_word.y += rand(-4..10)
+    @current_word.x -= rand(-10..10)
   end
 
   def current_word_movement_for_round_3
