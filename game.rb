@@ -5,7 +5,7 @@ class Game < Gosu::Window
 
   def initialize
     super 800, 600, false
-    self.caption = 'Type motherfucker type.'
+    self.caption = 'type type type'
     @bg = Gosu::Image.new self, 'bg.png'
     @logo = Gosu::Image.new self, 'newlogo.png'
     @lame = Gosu::Image.new self, 'lame.jpg'
@@ -21,7 +21,7 @@ class Game < Gosu::Window
     @score = 0
     @score_value = Gosu::Font.new(self, Gosu::default_font_name, 50)
     @word_position = 0
-    @input_area = Gosu::Font.new(self, Gosu::default_font_name, 35)
+    @input_area = Gosu::Font.new(self, "fonts/badabb.TTF", 80)
     @input = ''
     @test_words = []
     alpha_range = ('a'..'z')
@@ -29,7 +29,7 @@ class Game < Gosu::Window
     @num_to_char_hash = find_conversion(alpha_range, 4)
     @num_to_char_hash.merge!(find_conversion(number_range, 30)).merge!({39 => 0})
     test_word_list = (easy_words + medium_words + hard_words).sample(20)
-    test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 80, d)}
+    test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 170, d)}
     @game_running = true
     @count = 0
     @time_left = 20
@@ -43,7 +43,7 @@ class Game < Gosu::Window
       @score_image.draw 0, 40, 0
       @time_monitor_text.draw("#{@time_left}", 150, 0, 0, 1, 1, 0xffff0000)
       @score_value.draw("#{@score}", 110, 40, 0, 1, 1, 0xffff0000)
-      @input_area.draw(@input, 150, 60, 0, 1, 1, 0xff_ffffff)
+      @input_area.draw(@input, 400, 250, 0, 1, 1, 0xff_ffffff)
       draw_objects(@test_words)
     else
       @final_score.draw("You got #{@score/10} words right.", 200, 200, 0, 1, 1, 0xff_0000ff)

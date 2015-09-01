@@ -6,7 +6,7 @@ class TestingWord
     @x = x
     @y = y
     @word = word
-    @input_area = Gosu::Font.new(window, Gosu::default_font_name, 35)
+    @input_area = Gosu::Font.new(window, "fonts/badabb.TTF", 80)
   end
 
   def draw
