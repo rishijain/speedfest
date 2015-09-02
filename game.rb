@@ -11,6 +11,7 @@ class Game < Gosu::Window
     @lame = Gosu::Image.new self, 'lame.jpg'
     @respect = Gosu::Image.new self, 'salute.jpg'
     @keypress = Gosu::Song.new(self, "keypress.mp3")
+    @wrong_answer = Gosu::Song.new(self, "wronganswer.mp3")
     @time_monitor = 0 #value is in seconds
     font_path = "fonts/badabb.TTF"
     @round = 1
@@ -33,7 +34,7 @@ class Game < Gosu::Window
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 170, d)}
     @game_running = true
     @count = 0
-    @time_left = 45
+    @time_left = 25
   end
 
   def draw
@@ -59,7 +60,11 @@ class Game < Gosu::Window
 
   def button_down(id)
     if id == 40 #enterkey
-      @score += 10 if check_if_input_matches?
+      if check_if_input_matches?
+        @score += 10 
+      else
+        @wrong_answer.play(false)
+      end
       assign_round
       reset_input_to_blank
       remove_current_word_from_list
@@ -159,7 +164,7 @@ class Game < Gosu::Window
   def final_score_message
     if @score < 60
       @lame.draw 0,0,0
-      return 'Just one word for you: RESPECT ..!!!'
+      return "I don't have words for such shambolic performance."
     elsif @score >= 60 and @score < 120
       return 'Just go and practise and practise and practise bcoz it will never be enough for you ..!!'
     elsif @score >= 120 and @score < 190
