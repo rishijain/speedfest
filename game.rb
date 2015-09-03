@@ -61,7 +61,7 @@ class Game < Gosu::Window
   def button_down(id)
     if id == 40 #enterkey
       if check_if_input_matches?
-        @score += 10 
+        @score += 10
       else
         @wrong_answer.play(false)
       end
@@ -104,11 +104,13 @@ class Game < Gosu::Window
   end
 
   def medium_words
-    ['equipment', 'apparent', 'intelligence', 'medieval', 'weird', 'rhythm']
+    ['equipment', 'apparent', 'intelligence', 'medieval', 'weird', 'rhythm', 'principle', 'questionnaire',
+     'relevant', 'library']
   end
 
   def hard_words
-    ['amateur', 'bellwether', 'believe', 'cemetery', 'conscience', 'conscientious', 'leisure', 'conviviality', '']
+    ['amateur', 'bellwether', 'believe', 'cemetery', 'conscience', 'conscientious', 'leisure', 'conviviality',
+     'inoculate', 'maneuver', 'perseverance', 'schedule']
   end
 
   def current_word_movement_for_round_1
