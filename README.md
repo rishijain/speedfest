@@ -8,8 +8,7 @@ This is a challenge to anyone who thinks that their typing speed and accuracy is
 SETUP NEEDED:
 
 1. gem install gosu.
-Note: gosu has some weird issues working along with rvm. So if you are facing issues in installing gosu on rvm backed ruby
-, switch to system ruby(rvm system) and install on it.
+(Note: gosu has some weird issues working along with rvm. So if you are facing issues in installing gosu on rvm backed ruby, switch to system ruby(rvm system) and install on it.)
 
 RULES:
 
