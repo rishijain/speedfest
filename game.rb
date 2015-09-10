@@ -18,7 +18,7 @@ class Game < Gosu::Window
     @game_title = Gosu::Font.new(self, Gosu::default_font_name, 50)
     @time_image = Gosu::Image.new self, 'timeleft.png'
     @score_image = Gosu::Image.new self, 'score.png'
-    @final_score = Gosu::Font.new(self, font_path, 30)
+    @final_score = Gosu::Font.new(self, font_path, 40)
     @time_monitor_text = Gosu::Font.new(self, font_path, 50)
     @score = 0
     @score_value = Gosu::Font.new(self, font_path, 50)
@@ -39,8 +39,8 @@ class Game < Gosu::Window
 
   def draw
     if @time_left > 0
-      @bg.draw 0,0,0
-      @logo.draw 300,0,0
+      @bg.draw 0, 0, 0
+      @logo.draw 300, 0, 0
       @time_image.draw 0, 0, 0
       @score_image.draw 0, 40, 0
       @time_monitor_text.draw("#{@time_left}", 150, 0, 0, 1, 1, 0xffff0000)
@@ -164,15 +164,17 @@ class Game < Gosu::Window
 
   def final_score_message
     if @score < 60
-      @lame.draw 0,0,0
+      @lame.draw 0, 0, 0
       return "I don't have words for such shambolic performance."
     elsif @score >= 60 and @score < 120
-      return 'Just go and practise and practise and practise bcoz it will never be enough for you ..!!'
+      @respect.draw 0, 0, 0
+      return 'You suck.'
     elsif @score >= 120 and @score < 190
+      @respect.draw 0, 0, 0
       return 'You are alright ... nothing special about you.'
     elsif @score == 200
-      @respect.draw 0,0,0
-      return 'Just one word for you: RESPECT ..!!!'
+      @respect.draw 0, 0, 0
+      return 'RESPECT ..!!!'
     end
   end
 end
