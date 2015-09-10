@@ -34,7 +34,7 @@ class Game < Gosu::Window
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 170, d)}
     @game_running = true
     @count = 0
-    @time_left = 25
+    @time_left = 20
   end
 
   def draw
@@ -114,12 +114,11 @@ class Game < Gosu::Window
   end
 
   def current_word_movement_for_round_1
-    @current_word.x -= 3
+    @current_word.x -= 1
   end
 
   def current_word_movement_for_round_2
-    @current_word.y += rand(-4..10)
-    @current_word.x -= rand(-10..10)
+    @current_word.x -= 3
   end
 
   def current_word_movement_for_round_3
