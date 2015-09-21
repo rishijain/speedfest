@@ -32,7 +32,6 @@ class Game < Gosu::Window
     @num_to_char_hash.merge!(find_conversion(number_range, 30)).merge!({39 => 0})
     test_word_list = (easy_words + medium_words + hard_words).sample(20)
     test_word_list.each_with_index {|d, index| @test_words << TestingWord.new(self, 400 * (index+1), 170, d)}
-    @game_running = true
     @count = 0
     @time_left = 20
   end
@@ -70,7 +69,6 @@ class Game < Gosu::Window
       remove_current_word_from_list
       move_words_into_position
     elsif id == 42 #backspace
-      @game_running = false
       close
     elsif id == Gosu::KbEscape
       close
